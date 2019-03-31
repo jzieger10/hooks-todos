@@ -1,10 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { useContext, useReducer } from "react";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import * as serviceWorker from "./serviceWorker";
+import todosContext from "./context";
+import todosReducer from "./reducer";
+import TodosContext from "./context";
+import TodoList from "./components/TodoList";
+
+const App = () => {
+	const initialState = useContext(todosContext);
+	const [state, dispatch] = useReducer(todosReducer, initialState);
+
+	return (
+		<TodosContext.Provider value={{ state, dispatch }}>
+			<TodoList />
+		</TodosContext.Provider>
+	);
+};
+
+ReactDOM.render(
+	<App />,
+
+	document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
