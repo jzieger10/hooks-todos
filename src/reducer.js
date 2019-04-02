@@ -3,6 +3,11 @@ import TodoList from "./components/TodoList";
 
 export default function reducer(state, action) {
 	switch (action.type) {
+		case "SET_CURRENT_TODO":
+			return {
+				...state,
+				currentTodo: action.payload,
+			};
 		case "TOGGLE_TODO":
 			const toggledTodos = state.todos.map((todo) =>
 				todo.id === action.payload.id
@@ -14,6 +19,12 @@ export default function reducer(state, action) {
 				todos: toggledTodos,
 			};
 		case "ADD_TODO":
+			if (!action.payload) {
+				return state;
+			}
+			if (state.todos.findIndex((todo) => todo.text === action.payload) > -1) {
+				return state;
+			}
 			const newTodo = {
 				id: uuidv4(),
 				text: action.payload,
@@ -24,15 +35,17 @@ export default function reducer(state, action) {
 				...state,
 				todos: addedTodos,
 			};
-		case "SET_CURRENT_TODO":
-			return {
-				...state,
-				currentTodo: action.payload,
-			};
+
 		case "UPDATE_TODO":
+			if (!action.payload) {
+				return state;
+			}
+			if (state.todos.findIndex((todo) => todo.text === action.payload) > -1) {
+				return state;
+			}
 			const updatedTodo = { ...state.currentTodo, text: action.payload };
 			const updatedTodoIndex = state.todos.findIndex(
-				(todo) => TodoList.id === state.currentTodo.id
+				(todo) => todo.id === state.currentTodo.id
 			);
 			const updatedTodos = [
 				...state.todos.slice(0, updatedTodoIndex),
@@ -48,8 +61,11 @@ export default function reducer(state, action) {
 			const filteredTodos = state.todos.filter(
 				(todo) => todo.id !== action.payload.id
 			);
+			const isRemovedTodo =
+				state.currentTodo.id === action.payload.id ? {} : state.currentTodo;
 			return {
 				...state,
+				currentTodo: isRemovedTodo,
 				todos: filteredTodos,
 			};
 		default:
