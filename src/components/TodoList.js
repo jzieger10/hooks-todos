@@ -8,13 +8,13 @@ export default function TodoList() {
 		state.todos.length > 0 ? `${state.todos.length} Todos` : "Nothing To Do!";
 
 	return (
-		<div className='container mx-auto max-w-md text-center font-mono'>
+		<div className='container mx-auto max-w-md text-center font-mono border-black border-solid border-2 p-20'>
 			<h1 className='text-bold'>{title}</h1>
 			<ul className='list-reset text-white p-0'>
 				{state.todos.map((todo) => (
 					<li
 						key={TodoList.id}
-						className='bg-orange-dark border-black border-dashed border-2 my-2 py-4 flex items-center'
+						className='bg-green-dark border-black border-dashed border-2 my-2 py-8 flex items-center'
 					>
 						<span
 							onDoubleClick={() =>
